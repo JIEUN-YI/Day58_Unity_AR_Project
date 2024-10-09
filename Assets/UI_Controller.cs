@@ -16,6 +16,7 @@ public class UI_Controller : MonoBehaviour
     bool isMenuAnimation; // 메뉴 활성화 판단여부
     bool isReload; // 재장전 판단여부
 
+
     private void Awake()
     {
         shooterController = GameObject.Find("ShooterController").GetComponent<ShooterController>();

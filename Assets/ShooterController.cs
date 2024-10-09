@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ShooterController : MonoBehaviour
 {
+    MonsterController monsterController;
+    public float monsterHp;
+
     [SerializeField] Transform fireCamPoint; // 레이저 시작 지점 = 카메라
     public float damange = 100;
     public float range = 30f; // 사정 거리
@@ -14,10 +17,16 @@ public class ShooterController : MonoBehaviour
     [SerializeField] public int curMagzine; // 현재 탄창수
     [SerializeField] public int maxMagazine; // 최대 탄창수
     public bool isReload = false; // 재장전 판단여부
+
+    private void Awake()
+    {
+        monsterController = GameObject.Find("MonsterController").GetComponent<MonsterController>();
+    }
     private void Start()
     {
         fireCamPoint = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
         curMagzine = maxMagazine;
+        monsterHp = monsterController.monsterHp;
     }
 
     private void Update()
@@ -38,6 +47,8 @@ public class ShooterController : MonoBehaviour
                 Debug.Log(" 맞았다. ");
                 Debug.Log($" {hit.collider.name} ");
                 StartCoroutine(OnFlashEffect(hit));
+                monsterHp-=damange;
+                Debug.Log($"몬스터 체력(슛) : {(int)monsterHp}");
             }
         }
         else if(curMagzine <= 0)

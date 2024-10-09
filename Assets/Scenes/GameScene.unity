@@ -244,6 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 6453942421879156752, guid: d1c3dd82c6dbc894ab6a33084f8d14f6, type: 3}
   curTime: 0
+  monsterHp: 800
 --- !u!1 &259622785
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091de692a5267084b825a8637dd09e46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterHp: 0
   fireCamPoint: {fileID: 1198156690}
   damange: 100
   range: 30
