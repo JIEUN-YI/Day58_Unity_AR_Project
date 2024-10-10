@@ -5,11 +5,10 @@ using UnityEngine;
 public class ShooterController : MonoBehaviour
 {
     MonsterController monsterController;
-    public float monsterHp;
 
     [SerializeField] Transform fireCamPoint; // 레이저 시작 지점 = 카메라
     public float damange = 100;
-    public float range = 30f; // 사정 거리
+    public float range = 50f; // 사정 거리
     [SerializeField] LayerMask layerMask; // 부딪힐 충돌체 레이어 설정
     [SerializeField] private GameObject impactEffect; // 적 피격 파티클
 
@@ -26,7 +25,7 @@ public class ShooterController : MonoBehaviour
     {
         fireCamPoint = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>();
         curMagzine = maxMagazine;
-        monsterHp = monsterController.monsterHp;
+
     }
 
     private void Update()
@@ -39,19 +38,22 @@ public class ShooterController : MonoBehaviour
         Ray ray = new Ray(fireCamPoint.position, fireCamPoint.forward * range);
         RaycastHit hit;
         curMagzine--; // 발사시 현재 탄환 수 감소
-        
+
         if (curMagzine > 0) // 탄환수가 0 이상이면
         {
             if (Physics.Raycast(ray, out hit, range))
             {
-                Debug.Log(" 맞았다. ");
-                Debug.Log($" {hit.collider.name} ");
-                StartCoroutine(OnFlashEffect(hit));
-                monsterHp-=damange;
-                Debug.Log($"몬스터 체력(슛) : {(int)monsterHp}");
+                if (hit.collider.tag == "Monster")
+                {
+                    Debug.Log(" 맞았다. ");
+                    Debug.Log($" {hit.collider.name} ");
+                    StartCoroutine(OnFlashEffect(hit));
+                    monsterController.curMonsterHp -= damange; // 몬스터의 체력에 데미지
+                    Debug.Log($"현재 몬스터 체력(shoot) :{ monsterController.curMonsterHp}");
+                }
             }
         }
-        else if(curMagzine <= 0)
+        else if (curMagzine <= 0)
         {
             Debug.Log("재장전이 필요합니다.");
             curMagzine = 0;
@@ -83,7 +85,7 @@ public class ShooterController : MonoBehaviour
     /// <returns></returns>
     public IEnumerator OnReload()
     {
-        while(curMagzine < maxMagazine)
+        while (curMagzine < maxMagazine)
         {
             curMagzine++;
             yield return new WaitForSeconds(0.05f);
