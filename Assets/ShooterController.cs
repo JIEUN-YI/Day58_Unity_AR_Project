@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShooterController : MonoBehaviour
 {
     MonsterController monsterController;
+    [SerializeField] Animator animator;
 
     [SerializeField] Transform fireCamPoint; // 레이저 시작 지점 = 카메라
     public float damange = 100;
@@ -17,6 +18,10 @@ public class ShooterController : MonoBehaviour
     [SerializeField] public int maxMagazine; // 최대 탄창수
     public bool isReload = false; // 재장전 판단여부
 
+    [Header("Sound")]
+    [SerializeField] AudioSource ShootingSound;
+    [SerializeField] AudioSource ReloadSound;
+    
     private void Awake()
     {
         monsterController = GameObject.Find("MonsterController").GetComponent<MonsterController>();
@@ -41,17 +46,18 @@ public class ShooterController : MonoBehaviour
 
         if (curMagzine > 0) // 탄환수가 0 이상이면
         {
+            StartCoroutine(ShootAnimation());
             if (Physics.Raycast(ray, out hit, range))
             {
                 if (hit.collider.tag == "Monster")
                 {
-                    Debug.Log(" 맞았다. ");
                     Debug.Log($" {hit.collider.name} ");
                     StartCoroutine(OnFlashEffect(hit));
                     monsterController.curMonsterHp -= damange; // 몬스터의 체력에 데미지
                     Debug.Log($"현재 몬스터 체력(shoot) :{ monsterController.curMonsterHp}");
                 }
             }
+
         }
         else if (curMagzine <= 0)
         {
@@ -88,9 +94,17 @@ public class ShooterController : MonoBehaviour
         while (curMagzine < maxMagazine)
         {
             curMagzine++;
+            ReloadSound.Play();
             yield return new WaitForSeconds(0.05f);
         }
         curMagzine = maxMagazine;
     }
 
+    public IEnumerator ShootAnimation()
+    {
+        animator.SetBool("isShoot", true);
+        ShootingSound.Play();
+        yield return new WaitForSeconds(0.05f);
+        animator.SetBool("isShoot", false);
+    }
 }

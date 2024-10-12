@@ -13,9 +13,10 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] GameObject UI_Magzine; // 탄환수 UI 오브젝트
     [SerializeField] GameObject UI_reload; // 재장전 메세지
 
+
     bool isMenuAnimation; // 메뉴 활성화 판단여부
     bool isReload; // 재장전 판단여부
-
+    public bool isGameStart; // 게임시작여부 판단
 
     private void Awake()
     {
