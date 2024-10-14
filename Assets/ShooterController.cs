@@ -54,14 +54,13 @@ public class ShooterController : MonoBehaviour
                     Debug.Log($" {hit.collider.name} ");
                     StartCoroutine(OnFlashEffect(hit));
                     monsterController.curMonsterHp -= damange; // 몬스터의 체력에 데미지
-                    Debug.Log($"현재 몬스터 체력(shoot) :{ monsterController.curMonsterHp}");
+                    StartCoroutine(MonsterHit());
                 }
             }
 
         }
         else if (curMagzine <= 0)
         {
-            Debug.Log("재장전이 필요합니다.");
             curMagzine = 0;
             isReload = true; // 재장전 필요
         }
@@ -106,5 +105,11 @@ public class ShooterController : MonoBehaviour
         ShootingSound.Play();
         yield return new WaitForSeconds(0.05f);
         animator.SetBool("isShoot", false);
+    }
+    public IEnumerator MonsterHit()
+    {
+        animator.SetBool("Hit", true);
+        yield return new WaitForSeconds(2f);
+        animator.SetBool("Hit", false);
     }
 }

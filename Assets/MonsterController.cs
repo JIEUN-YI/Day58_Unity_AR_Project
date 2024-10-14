@@ -95,6 +95,10 @@ public class MonsterController : MonoBehaviour
                 {
                     StartCoroutine(MonsterDied()); // 삭제 코루틴 시작
                 }
+                if(nowMonster.transform.position.y < -10)
+                {
+                    StartCoroutine(MonsterDied());
+                }
             }
         }
     }
